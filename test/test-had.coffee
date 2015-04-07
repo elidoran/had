@@ -26,16 +26,18 @@ describe 'test had\'s functions', ->
 
       it 'should return true', ->
 
-        successResult = id:'sample name', success:true
+        successResult = had:'sample name', success:true
         result = this.had.isSuccess successResult
+        assert.equal result?, true, 'result should exist'
         assert.equal result, true
 
     describe 'isSuccess of a had error result', ->
 
       it 'should return false', ->
 
-        errorResult = id:'sample name', error:'sample error'
+        errorResult = had:'sample name', error:'sample error'
         result = this.had.isSuccess errorResult
+        assert.equal result?, true, 'result should exist'
         assert.equal result, false
 
   describe 'test isNullParam', ->
@@ -43,25 +45,63 @@ describe 'test had\'s functions', ->
     beforeEach 'create new had(\'isNullParam\')', ->
       this.had = Had 'isNullParam'
 
-    describe 'with undefined', ->
+    describe 'with undefined and noReturn', ->
 
       it 'should fill error content and return true', ->
 
-        result = this.had.isNullParam 'test', undefined
+        result = this.had.isNullParam 'test', undefined, noReturn:true
+        assert.equal result?, true, 'result should exist'
         assert.equal result, true
-        assert.equal this.had.content.error, 'null'
-        assert.equal this.had.content.type,  'param'
-        assert.equal this.had.content.name,  'test'
+        assert.equal this.had.current.had, 'isNullParam'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'param'
+        assert.equal this.had.current.name,  'test'
+
+    describe 'with null and noReturn', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.isNullParam 'test', null, noReturn:true
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'isNullParam'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'param'
+        assert.equal this.had.current.name,  'test'
+
+    describe 'with undefined', ->
+
+      it 'should fill error content and return it', ->
+
+        errorResult =
+          had: 'isNullParam'
+          error: 'null'
+          type: 'param'
+          name: 'test'
+          history: []
+
+        result = this.had.isNullParam 'test', undefined, noReturn:false
+        assert.equal result?, true, 'result should exist'
+        assert.deepEqual result, errorResult
+        assert.equal this.had.history.length, 0
+        assert.deepEqual this.had.current, had:'isNullParam'
 
     describe 'with null', ->
 
-      it 'should fill error content and return true', ->
+      it 'should fill error content and return it', ->
 
-        result = this.had.isNullParam 'test', null
-        assert.equal result, true
-        assert.equal this.had.content.error, 'null'
-        assert.equal this.had.content.type,  'param'
-        assert.equal this.had.content.name,  'test'
+        errorResult =
+          had: 'isNullParam'
+          error: 'null'
+          type: 'param'
+          name: 'test'
+          history: []
+
+        result = this.had.isNullParam 'test', null, noReturn:false
+        assert.equal result?, true, 'result should exist'
+        assert.deepEqual result, errorResult
+        assert.equal this.had.history.length, 0
+        assert.deepEqual this.had.current, had:'isNullParam'
 
     describe 'with empty string', ->
 
@@ -162,3 +202,34 @@ describe 'test had\'s functions', ->
         assert.equal result.success, true, 'result.success should be true'
         assert.equal result.test?, true, 'result.test should exist'
         assert.equal result.test, 'option'
+
+    describe 'with \'no return\' true', ->
+
+      it 'returns true, *not* the success result', ->
+
+        result = this.had.success noReturn:true
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true, 'result.success should be true'
+
+  describe 'test error', ->
+
+    beforeEach 'create new had(\'error\')', ->
+      this.had = Had 'error'
+
+    describe 'with no options', ->
+
+      it 'should return error result', ->
+
+        result = this.had.error()
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'error'
+
+    describe 'with \'error\' option', ->
+
+      it 'should return error result with error option', ->
+
+        result = this.had.error error:'test'
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'test'
