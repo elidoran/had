@@ -1,9 +1,9 @@
 
-module.exports = (name) ->
+module.exports = (hadOptions) ->
 
   return had =
-    id: name
-    current: had:name
+    id: hadOptions.name ? 'unknown had'
+    current: had:hadOptions.name ? 'unknown had'
     history: []
 
     pushCurrent: () ->
