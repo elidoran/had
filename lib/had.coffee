@@ -10,12 +10,12 @@ module.exports = (hadOptions) ->
 
     pushCurrent: () ->
       this.content.push this.current
-      return this.current = had:hadId
+      return this.current = had:this.id
 
     popCurrent: () ->
       result = this.current
       result.history = this.history
-      this.current = had:hadId
+      this.current = had:this.id
       this.history = []
       return result
 
