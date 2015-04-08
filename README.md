@@ -72,6 +72,8 @@ console.log 'I have: ', result.someValue
     6. [had.nullArg(argName, arg)](#hadnullargargname-arg)
     7. [had.isSuccess(result)](#hadissuccessresult)
 5. [Why had?](#why-had)
+6. [Future Plans](#future-plans)
+    1. [Register Handlers](#register-handlers)
 
 ## Basic Use
 
@@ -490,6 +492,25 @@ which must bail up to a handler. All those other errors? Let's manage them
 directly. Instead, require the caller directly above the error occurrence to
 inspect the return results, discover the error, and respond. We can include a
 lot of information rarely included in thrown errors.
+
+## Future Plans
+
+### Register Handlers
+
+I have an idea to allow registering functions on a `had` which run for specific
+`error` or `type` values. *Could let the functions look at the object and decide
+if they will do anything or not, or, use a strategy pattern to select them.*
+
+Then, if someone wanted to change a library to throw Errors instead, (hey, some
+persons really like thrown errors), they can register a handler which does
+exactly that.
+
+Or, it could alter an error object, or log it, or report it to another tool, or
+send info to a developer-mode tool, or grab extra info from a service, or
+prevent the error from being used (maybe a library is sending something as an
+error and the library user disagrees).
+
+I see trying this out in version 0.5 or maybe 0.6.
 
 
 ## MIT License
