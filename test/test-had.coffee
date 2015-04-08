@@ -3,10 +3,18 @@ Had = require '../index'
 
 describe 'test had\'s functions', ->
 
+  describe 'test had id', ->
+
+    it 'should have id in both had and current info', ->
+      id = 'test-id'
+      had = Had id:id
+      assert.equal had.id, id, 'had should have its id'
+      assert.equal had.current.had, id, 'had\'s current should have id as `had`'
+
   describe 'test isSuccess', ->
     #before ->
     beforeEach 'create new had(\'isSuccess\')', ->
-      this.had = Had 'isSuccess'
+      this.had = Had id:'isSuccess'
 
     describe 'isSuccess of true', ->
 
@@ -43,7 +51,7 @@ describe 'test had\'s functions', ->
   describe 'test isNullParam', ->
 
     beforeEach 'create new had(\'isNullParam\')', ->
-      this.had = Had 'isNullParam'
+      this.had = Had id:'isNullParam'
 
     describe 'with undefined and noReturn', ->
 
@@ -183,7 +191,7 @@ describe 'test had\'s functions', ->
   describe 'test success', ->
 
     beforeEach 'create new had(\'success\')', ->
-      this.had = Had 'success'
+      this.had = Had id:'success'
 
     describe 'with no options', ->
 
@@ -214,7 +222,7 @@ describe 'test had\'s functions', ->
   describe 'test error', ->
 
     beforeEach 'create new had(\'error\')', ->
-      this.had = Had 'error'
+      this.had = Had id:'error'
 
     describe 'with no options', ->
 

@@ -1,19 +1,21 @@
 
 module.exports = (hadOptions) ->
 
+  hadId = hadOptions?.id ? 'unknown had'
+
   return had =
-    id: hadOptions.name ? 'unknown had'
-    current: had:hadOptions.name ? 'unknown had'
+    id: hadId
+    current: had:hadId
     history: []
 
     pushCurrent: () ->
       this.content.push this.current
-      return this.current = had:name
+      return this.current = had:hadId
 
     popCurrent: () ->
       result = this.current
       result.history = this.history
-      this.current = had:name
+      this.current = had:hadId
       this.history = []
       return result
 
