@@ -24,13 +24,13 @@ had = require('had') name:'name your had'
 
 ```coffeescript
 return had.error
-  error:'invalid user'
-  type:'auth'
-  username:'someone'
+  error:'invalid user'  # if null, it'll be set to 'error'
+  type:'auth'           # if null, it'll be set to 'unknown'
+  username:'someone'    # optional value, you can specify as many as you want
 
-return had.success
-  username:'someone'
-  token:'kJFO2fs8gvhhhg2o34uh9g7f'
+return had.success # success only sets value: success:true
+  username:'someone'               # optional value
+  token:'kJFO2fs8gvhhhg2o34uh9g7f' # optional value
 ```
 
 ### Use success or error result
