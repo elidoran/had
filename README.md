@@ -85,6 +85,8 @@ had = require('had') name:'my had'
 
 ### Success
 
+[Table of Contents](#table-of-contents)
+
 See [had.success(options)](#hadsuccessoptions) for full example.
 
 ```coffeescript
@@ -96,6 +98,8 @@ console.log 'sum = ', result.sum
 ```
 
 ### Error
+
+[Table of Contents](#table-of-contents)
 
 See [had.error(options)](#haderroroptions) for full example.
 
@@ -110,6 +114,8 @@ console.log 'bad value: ', result.value
 
 ### Null argument check
 
+[Table of Contents](#table-of-contents)
+
 See [had.nullArg(options)](#hadnullargoptions) for full example.
 
 ```coffeescript
@@ -118,6 +124,8 @@ if had.nullParam 'info', info
 ```
 
 ### Result check
+
+[Table of Contents](#table-of-contents)
 
 See [had.isSuccess(result)](#hadissuccessresult) for full example.
 
@@ -133,13 +141,19 @@ unless had.isSuccess result
 
 ## Advanced Use
 
+[Table of Contents](#table-of-contents)
+
 
 ### Had Result ?
+
+[Table of Contents](#table-of-contents)
 
 ```coffeescript
 ```
 
 ### Include other results
+
+[Table of Contents](#table-of-contents)
 
 You may combine a `had` result you received from elsewhere into your own results. See [Had Result ?](#had-result-) about testing if an object is a `had` result.
 
@@ -147,13 +161,14 @@ You may combine a `had` result you received from elsewhere into your own results
 theirResult = someCall()
 ```
 
-
-
 ## What's in a Result Object
 
 ### Success Results
 
+
 #### Single Success Result
+
+[Table of Contents](#table-of-contents)
 
 ```coffeescript
 successResult = had.success key1:value1, key2:value2, ...
@@ -172,6 +187,8 @@ successResult =
 ```
 
 #### Multiple Success Results
+
+[Table of Contents](#table-of-contents)
 
 When a second success result is added it combines them into an array.
 
@@ -192,7 +209,12 @@ result = # contents of result
 
 ### Error Results
 
+[Table of Contents](#table-of-contents)
+
 #### Single Error Result
+
+[Table of Contents](#table-of-contents)
+
 ```coffeescript
 errorResult = had.error key1:value1, key2:value2, ...
 # same as this:
@@ -211,6 +233,8 @@ errorResult =
 ```
 
 #### Multiple Error Results
+
+[Table of Contents](#table-of-contents)
 
 When a second error result is added it combines them into an array.
 
@@ -239,6 +263,8 @@ result = # contents of result
 
 ### Combined Results
 
+[Table of Contents](#table-of-contents)
+
 When a second result is added, either success or error, via any of the functions, the results are stored in arrays.
 
 ```coffeescript
@@ -262,8 +288,12 @@ results =
 
 ## API
 
+[Table of Contents](#table-of-contents)
+
 
 ### **had.success(options)**
+
+[Table of Contents](#table-of-contents)
 
 Does:
 1. creates new Success result from options. See [Success Results](#success-results)
@@ -282,6 +312,8 @@ result = # contents of result are:
 
 ### **had.error(options)**
 
+[Table of Contents](#table-of-contents)
+
 Does:
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
@@ -299,6 +331,8 @@ result = # contents of result are:
 
 ### **had.results(options)**
 
+[Table of Contents](#table-of-contents)
+
 Return the results stored in `had`.
 
 Does:
@@ -315,6 +349,8 @@ result = # contents of result are:
 ```
 
 ### **had.addSuccess(options)**
+
+[Table of Contents](#table-of-contents)
 
 Stores a Success result from options and does **not** return the results. The info is held until one of these calls:
 
@@ -339,6 +375,8 @@ result = # contents of results are:
 
 ### **had.addError(options)**
 
+[Table of Contents](#table-of-contents)
+
 Stores an Error result from options and does **not** return the results. The info is held until one of these calls:
 
 1. [had.results(options)](#hadresultsoptions)
@@ -362,6 +400,8 @@ result = # contents of result are:
 
 ### **had.nullArg(argName, arg)**
 
+[Table of Contents](#table-of-contents)
+
 Returns true if `arg` is null or undefined; false otherwise.
 
 ```coffeescript
@@ -381,6 +421,8 @@ if had.nullArg 'someArg', someArg
 
 ### **had.isSuccess(result)**
 
+[Table of Contents](#table-of-contents)
+
 Returns true when `result` is `true` or a `had` success result.
 
 ```coffeescript
@@ -392,6 +434,8 @@ unless had.isSuccess result # unless falsey or a `had` error result
 
 
 ## Why had?
+
+[Table of Contents](#table-of-contents)
 
 I've had enough of throwing errors when a common problem occurs and
 writing try-catch statements to handle errors thrown by other's. They are often
