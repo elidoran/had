@@ -143,28 +143,47 @@ unless had.isSuccess result
 
 [Table of Contents](#table-of-contents)
 
-
 ### Had Result ?
 
 [Table of Contents](#table-of-contents)
 
+Check a result to see if it was provided by a `had` instance?
+
+I haven't implemented this specifically because I haven't seen a use for it yet.
+
+Instead, what I do is check for a falsey value, or `had` error, and return an error including the result.
+
 ```coffeescript
+result = someCall()
+
+unless had.isSuccess result
+  return had.error result
 ```
+
+See [had.isSuccess(result)](#hadissuccessresult)
+
+See directly below for explanation of how the result is included.
 
 ### Include other results
 
 [Table of Contents](#table-of-contents)
 
-You may combine a `had` result you received from elsewhere into your own results. See [Had Result ?](#had-result-) about testing if an object is a `had` result.
+You may combine a `had` result you received from elsewhere into your own results.
+See [Had Result ?](#had-result-) about testing if an object is a `had` result.
+(also shown directly above this section)
 
 ```coffeescript
-theirResult = someCall()
+return had.error result, error:'something failed', type:'fail' # bad examples
 ```
+
+That's it. If it's a `had` result it will be included in your error result.
+
+**Note:** When it's instead a falsey value (false, null, undefined) then only
+the error info you provide is used to create your error.
 
 ## What's in a Result Object
 
 ### Success Results
-
 
 #### Single Success Result
 
@@ -328,6 +347,11 @@ result = # contents of result are:
   name : 'someParam'
   had: name # name provided when creating the 'had'
 ```
+
+**Note:** An optional second argument is used when including another result into
+this one. When both arguments are provided it is assumed the first one is the
+result to include, and the second is your error info. When the first argument is
+a simple falsey value (null/undefined/false) then it isn't used.
 
 ### **had.results(options)**
 
