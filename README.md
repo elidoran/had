@@ -50,16 +50,17 @@ console.log 'I have: ', result.someValue
 1. [Install](#install)
 2. [Basic Use](#basic-use)
     1. [Require](#require) and create `had`
-    2. [Success](#success-example) result example
-    3. [Error](#error-example) result example
+    2. [Success](#success) result example
+    3. [Error](#error) result example
     4. [Null Argument Check](#null-argument-check)
+    5. [Result check](#result-check)
 3. [Advanced Use](#advanced-use)
     1. [Had Result ?](#had-result-)
     1. [Include Other Results](#include-other-results)
-4. [What's in a Result Object](#what-s-in-a-result-object)
+4. [What's in a Result Object](#whats-in-a-result-object)
     1. [Single Success Result](#single-success-result)
-    2. [Single Error Result](#single-error-result)
-    3. [Multiple Success Results](#multiple-success-results)
+    2. [Multiple Success Results](#multiple-success-results)
+    3. [Single Error Result](#single-error-result)
     4. [Multiple Error Results](#multiple-error-results)
     5. [Combined Success and Error Results](#combined-results)
 4. [API](#api)
@@ -67,8 +68,8 @@ console.log 'I have: ', result.someValue
     2. [had.error(options)](#haderroroptions)
     3. [had.results(options)](#hadresultsoptions)
     4. [had.addSuccess(options)](#hadaddsuccessoptions)
-    5. [had.addError(options)](#hadadderrroptions)
-    6. [had.nullArg(argName, arg)](#hadnullargnamearg)
+    5. [had.addError(options)](#hadadderrorptions)
+    6. [had.nullArg(argName, arg)](#hadnullargargname-arg)
     7. [had.isSuccess(result)](#hadissuccessresult)
 5. [Why had?](#why-had)
 
@@ -318,7 +319,7 @@ result = # contents of result are:
 Stores a Success result from options and does **not** return the results. The info is held until one of these calls:
 
 1. [had.results(options)](#hadresultsoptions)
-2. [had.errors(options)](#haderrorsoptions)
+2. [had.error(options)](#haderroroptions)
 3. [had.success(options)](#hadsuccessoptions)
 
 Does:
@@ -341,7 +342,7 @@ result = # contents of results are:
 Stores an Error result from options and does **not** return the results. The info is held until one of these calls:
 
 1. [had.results(options)](#hadresultsoptions)
-2. [had.errors(options)](#haderrorsoptions)
+2. [had.error(options)](#haderroroptions)
 3. [had.success(options)](#hadsuccessoptions)
 
 Does:
