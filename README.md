@@ -6,7 +6,7 @@
 Results generator tool for returning objects which contain either success
 results or errors.
 
-For more explanation, read [Why?](#why-)
+For more explanation, read [Why had?](#why-had)
 
 ## Quick Start
 
