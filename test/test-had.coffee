@@ -376,3 +376,102 @@ describe 'test had\'s functions', ->
         assert.equal result.type, 'unknown'
         assert.equal result._success_?, true, 'result._success_ should exist'
         assert.equal result._success_, 'test'
+
+    describe 'with previous error result to include', ->
+
+      it 'should return both errors', ->
+
+        previousError =
+          had: 'anotherHad'
+          error:'previous issue'
+          type:'something else'
+          some:'thing'
+
+        thisError =
+          had: 'error'
+          error:'testing'
+          type:'test'
+
+        combinedError =
+          had: 'error'
+          error: 'multiple'
+          errors: [previousError, thisError]
+        result = this.had.error previousError, thisError
+
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had?, true, 'result.had should exist'
+        assert.equal result.had, 'error', 'result.had should be \'error\''
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'multiple'
+        assert.deepEqual result, combinedError
+
+    describe 'with previous success result to include', ->
+
+      it 'should return both errors', ->
+
+        previousResult =
+          had: 'anotherHad'
+          success:true
+          some:'thing'
+
+        thisError =
+          had: 'error'
+          error:'testing'
+          type:'test'
+
+        combinedResult =
+          had: 'error'
+          success:true
+          successes: [previousResult]
+          error: 'multiple'
+          errors: [thisError]
+        result = this.had.error previousResult, thisError
+
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had?, true, 'result.had should exist'
+        assert.equal result.had, 'error', 'result.had should be \'error\''
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'multiple'
+        assert.equal result.success?, true, 'result.error should exist'
+        assert.equal result.success, true, 'result.success should be true'
+        assert.deepEqual result, combinedResult
+
+    describe 'with previous true result to include', ->
+
+      it 'should return the one error', ->
+
+        thisError =
+          had: 'error'
+          error:'testing'
+          type:'test'
+
+        result = this.had.error true, error:'testing', type:'test'
+
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had?, true, 'result.had should exist'
+        assert.equal result.had, 'error', 'result.had should be \'error\''
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'testing'
+        assert.equal result.type?, true, 'result.type should exist'
+        assert.equal result.type, 'test',
+        assert.deepEqual result, thisError
+
+    describe 'with previous false result to include', ->
+
+      it 'should return the one error', ->
+
+        thisError =
+          had: 'error'
+          error:'testing'
+          type:'test'
+
+        result = this.had.error true, error:'testing', type:'test'
+
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had?, true, 'result.had should exist'
+        assert.equal result.had, 'error', 'result.had should be \'error\''
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'testing'
+        assert.equal result.type?, true, 'result.type should exist'
+        assert.equal result.type, 'test',
+        assert.deepEqual result, thisError
