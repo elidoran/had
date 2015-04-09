@@ -28,7 +28,14 @@ module.exports = (hadOptions) ->
       had.current = null
       return result
 
-    success: (options={}) ->
+    success: (options={}, extra) ->
+
+      if extra?
+        if options?.had
+          if options?.error then had.addError options
+          else if options?.success then had.addSuccess options
+        options = extra
+        extra = undefined
 
       options?.success ?= true
       options?.had     ?= hadId
@@ -53,6 +60,7 @@ module.exports = (hadOptions) ->
 
         else if had.current?.success
           result =
+            had    : had.id
             success: true
             successes: [had.current, options]
 
@@ -76,7 +84,7 @@ module.exports = (hadOptions) ->
           else if options?.success then had.addSuccess options
         options = extra
         extra = undefined
-        
+
       options?.error ?= 'error'
       options?.type  ?= 'unknown'
       options?.had   ?= hadId

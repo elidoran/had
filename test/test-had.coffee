@@ -303,6 +303,86 @@ describe 'test had\'s functions', ->
         assert.equal result?, true, 'result should exist'
         assert.deepEqual result, successResult
 
+    describe 'with previous error result to include', ->
+
+      it 'should return both results', ->
+
+        previousError =
+          had: 'anotherHad'
+          error:'previous issue'
+          type:'something else'
+          some:'thing'
+
+        thisResult =
+          had: 'success'
+          success:'true'
+
+        combinedResult =
+          had: 'success'
+          success:true
+          successes: [thisResult]
+          error: 'multiple'
+          errors: [previousError]
+        result = this.had.success previousError, thisResult
+
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had?, true, 'result.had should exist'
+        assert.equal result.had, 'success', 'result.had should be \'error\''
+        assert.equal result.error?, true, 'result.error should exist'
+        assert.equal result.error, 'multiple'
+        assert.deepEqual result, combinedResult
+
+    describe 'with previous success result to include', ->
+
+      it 'should return both successes', ->
+
+        previousResult =
+          had: 'anotherHad'
+          success:true
+          some:'thing'
+
+        thisResult =
+          had: 'success'
+          success:true
+          something:'else'
+
+        combinedResult =
+          had: 'success'
+          success:true
+          successes: [previousResult, thisResult]
+        result = this.had.success previousResult, something:'else'
+
+        assert.equal result?, true, 'result should exist'
+        assert.deepEqual result, combinedResult
+
+    describe 'with previous true result to include', ->
+
+      it 'should return the one success', ->
+
+        thisResult =
+          had: 'success'
+          success:true
+          some:'thing'
+
+        result = this.had.success true, some:'thing'
+
+        assert.equal result?, true, 'result should exist'
+        assert.deepEqual result, thisResult
+
+    describe 'with previous false result to include', ->
+
+      it 'should return the one success', ->
+
+        thisResult =
+          had: 'success'
+          success:true
+          some:'thing'
+
+        result = this.had.success false, some:'thing'
+
+        assert.equal result?, true, 'result should exist'
+        assert.deepEqual result, thisResult
+
   describe 'test error', ->
 
     beforeEach 'create new had(\'error\')', ->
