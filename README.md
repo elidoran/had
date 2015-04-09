@@ -308,15 +308,14 @@ results =
 ```
 
 ## API
-
 [Table of Contents](#table-of-contents)
 
 
 ### **had.success(options)**
-
 [Table of Contents](#table-of-contents)
 
 Does:
+
 1. creates new Success result from options. See [Success Results](#success-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 3. clears the `had` so it's ready for new results
@@ -362,17 +361,23 @@ a simple falsey value (null/undefined/false) then it isn't used.
 Return the results stored in `had`.
 
 Does:
+
 1. clears the `had` so it's ready for new results
 2. returns the results
 
 ```coffeescript
-result = had.error error:'null', type:'param', name:'someParam'
+result = had.addError error:'null', type:'param', name:'someParam'
+# result = true, it was added
+# now call results() to get that object
+result = had.results()
 result = # contents of result are:
   error: 'null'
   type : 'param'
   name : 'someParam'
   had: name # name provided when creating the 'had'
 ```
+
+**Note: *** No use for the options arg yet.
 
 ### **had.addSuccess(options)**
 
@@ -385,6 +390,7 @@ Stores a Success result from options and does **not** return the results. The in
 3. [had.success(options)](#hadsuccessoptions)
 
 Does:
+
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 
@@ -410,6 +416,7 @@ Stores an Error result from options and does **not** return the results. The inf
 3. [had.success(options)](#hadsuccessoptions)
 
 Does:
+
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 
