@@ -87,7 +87,7 @@ had = require('had') name:'my had'
 
 ### Success
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 See [had.success(options)](#hadsuccessoptions) for full example.
 
@@ -101,7 +101,7 @@ console.log 'sum = ', result.sum
 
 ### Error
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 See [had.error(options)](#haderroroptions) for full example.
 
@@ -116,7 +116,7 @@ console.log 'bad value: ', result.value
 
 ### Null argument check
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 See [had.nullArg(options)](#hadnullargoptions) for full example.
 
@@ -127,7 +127,7 @@ if had.nullParam 'info', info
 
 ### Result check
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 See [had.isSuccess(result)](#hadissuccessresult) for full example.
 
@@ -143,11 +143,11 @@ unless had.isSuccess result
 
 ## Advanced Use
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 ### Had Result ?
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Check a result to see if it was provided by a `had` instance?
 
@@ -168,7 +168,7 @@ See directly below for explanation of how the result is included.
 
 ### Include other results
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 You may combine a `had` result you received from elsewhere into your own results.
 See [Had Result ?](#had-result-) about testing if an object is a `had` result.
@@ -189,7 +189,7 @@ the error info you provide is used to create your error.
 
 #### Single Success Result
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 ```coffeescript
 successResult = had.success key1:value1, key2:value2, ...
@@ -209,7 +209,7 @@ successResult =
 
 #### Multiple Success Results
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 When a second success result is added it combines them into an array.
 
@@ -230,11 +230,11 @@ result = # contents of result
 
 ### Error Results
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 #### Single Error Result
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 ```coffeescript
 errorResult = had.error key1:value1, key2:value2, ...
@@ -255,7 +255,7 @@ errorResult =
 
 #### Multiple Error Results
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 When a second error result is added it combines them into an array.
 
@@ -284,7 +284,7 @@ result = # contents of result
 
 ### Combined Results
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 When a second result is added, either success or error, via any of the functions, the results are stored in arrays.
 
@@ -308,11 +308,11 @@ results =
 ```
 
 ## API
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 
 ### **had.success(options)**
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Does:
 
@@ -332,7 +332,7 @@ result = # contents of result are:
 
 ### **had.error(options)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Does:
 1. creates new Error result from options. See [Error Results](#error-results)
@@ -356,7 +356,7 @@ a simple falsey value (null/undefined/false) then it isn't used.
 
 ### **had.results(options)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Return the results stored in `had`.
 
@@ -381,7 +381,7 @@ result = # contents of result are:
 
 ### **had.addSuccess(options)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Stores a Success result from options and does **not** return the results. The info is held until one of these calls:
 
@@ -407,7 +407,7 @@ result = # contents of results are:
 
 ### **had.addError(options)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Stores an Error result from options and does **not** return the results. The info is held until one of these calls:
 
@@ -433,7 +433,7 @@ result = # contents of result are:
 
 ### **had.nullArg(argName, arg)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Returns true if `arg` is null or undefined; false otherwise.
 
@@ -454,7 +454,7 @@ if had.nullArg 'someArg', someArg
 
 ### **had.isSuccess(result)**
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 Returns true when `result` is `true` or a `had` success result.
 
@@ -468,7 +468,7 @@ unless had.isSuccess result # unless falsey or a `had` error result
 
 ## Why had?
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 I've had enough of throwing errors when a common problem occurs and
 writing try-catch statements to handle errors thrown by other's. They are often
@@ -501,10 +501,10 @@ inspect the return results, discover the error, and respond. We can include a
 lot of information rarely included in thrown errors.
 
 ## Future Plans
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 ### Register Handlers
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 I have an idea to allow registering functions on a `had` which run for specific
 `error` or `type` values. *Could let the functions look at the object and decide
@@ -521,6 +521,6 @@ error and the library user disagrees).
 
 I see trying this out in version 0.5 or maybe 0.6.
 
-[Table of Contents](#table-of-contents)
+[Back to: Table of Contents](#table-of-contents)
 
 ## MIT License
