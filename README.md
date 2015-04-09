@@ -501,8 +501,10 @@ inspect the return results, discover the error, and respond. We can include a
 lot of information rarely included in thrown errors.
 
 ## Future Plans
+[Table of Contents](#table-of-contents)
 
 ### Register Handlers
+[Table of Contents](#table-of-contents)
 
 I have an idea to allow registering functions on a `had` which run for specific
 `error` or `type` values. *Could let the functions look at the object and decide
@@ -519,5 +521,6 @@ error and the library user disagrees).
 
 I see trying this out in version 0.5 or maybe 0.6.
 
+[Table of Contents](#table-of-contents)
 
 ## MIT License
