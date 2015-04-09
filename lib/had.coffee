@@ -3,82 +3,122 @@ module.exports = (hadOptions) ->
 
   hadId = hadOptions?.id ? 'unknown had'
 
-  return had =
+  had =
     id: hadId
-    current: had:hadId
-    history: []
 
-    pushCurrent: () ->
-      this.content.push this.current
-      return this.current = had:this.id
-
-    popCurrent: () ->
-      result = this.current
-      result.history = this.history
-      this.current = had:this.id
-      this.history = []
-      return result
-
-    isNullParam: (paramName, param, options) ->
-      if not param?
-        unless options?
-          options =
-            noReturn: true
-            error: null
-            type: 'param'
-            name: paramName
-        else
-          options.noReturn ?= true
-          options.error ?= 'null'
-          options.type  ?= 'param'
-          options.name  ?= paramName
-        return this.error options
+    nullArg: (argName, arg) ->
+      unless arg?
+        had.addError error:'null', type:'arg', name:argName
+        return true
 
       return false
 
-
     isSuccess: (thing) ->
       if thing?.had?
+        if thing?.error? then return false
+
         if thing?.success? then return true
 
-        if thing?.error? then return false
+        return true #? an empty result?
       else
-        return thing? and thing
-
+        if thing? and thing then true else false
 
     results: (options) ->
-
-      result = this.current
-
-      if result?.error? or result?.success?
-        result = this.pushCurrent()
-
-      # if exists, store value in this scope, then delete from options
-      if options?.noReturn?
-        noReturn = options.noReturn
-        delete options.noReturn
-      else
-        noReturn = false
-
-      unless noReturn
-        result = this.popCurrent()
-
-      result[key] = value for own key,value of options
-
-      return if noReturn? and noReturn then true else result
+      result = had.current
+      had.current = null
+      return result
 
     success: (options={}) ->
-      options.success ?= true
-      delete options.error if options?.error?
 
-      result = this.results options
+      options?.success ?= true
+      options?.had     ?= hadId
+
+      if options?.error?
+        options._error_ = options.error
+        delete options.error
+
+      unless had?.current?
+        result = options
+
+      else
+
+        if had.current?.successes
+          result = had.current
+          result.successes.push options
+
+        else if had.current?.errors?
+          result = had.current
+          result.success = true
+          result.successes = [options]
+
+        else if had.current?.success
+          result =
+            success: true
+            successes: [had.current, options]
+
+        else if had.current?.error?
+          result =
+            had    : had.id
+            success: true
+            error  : 'multiple'
+            successes: [options]
+            errors   : [had.current]
+
+        had.current = null
 
       return result
 
     error: (options={}) ->
-      options.error ?= 'error'
-      options.type  ?= 'unspecified'
-      delete options.success if options?.success?
-      result = this.results options
 
+      options?.error ?= 'error'
+      options?.type  ?= 'unknown'
+      options?.had   ?= hadId
+
+      if options?.success?
+        options._success_ = options.success
+        delete options.success
+
+      unless had?.current?
+        result = options
+
+      else
+
+        if had.current?.errors?
+          result = had.current
+          result.errors.push options
+
+        else if had.current?.successes
+          result = had.current
+          result.error = 'multiple'
+          result.errors = [options]
+
+        else if had.current?.error?
+          result =
+            had    : had.id
+            error  : 'multiple'
+            errors   : [had.current, options]
+
+        else if had.current?.success
+          result =
+            had    : had.id
+            success: true
+            error  : 'multiple'
+            successes: [had.current]
+            errors   : [options]
+
+        had.current = null
+
+      return result
+
+    addSuccess: (options) ->
+      had.current = had.success options
+      return true
+
+    addError: (options) ->
+      had.current = had.error options
+      return true
+
+    results: () ->
+      result = had.current ? had:had.id
+      had.current = null
       return result
