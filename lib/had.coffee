@@ -68,8 +68,15 @@ module.exports = (hadOptions) ->
 
       return result
 
-    error: (options={}) ->
+    error: (options={}, extra) ->
 
+      if extra?
+        if options?.had
+          if options?.error then had.addError options
+          else if options?.success then had.addSuccess options
+        options = extra
+        extra = undefined
+        
       options?.error ?= 'error'
       options?.type  ?= 'unknown'
       options?.had   ?= hadId
