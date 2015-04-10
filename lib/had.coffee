@@ -24,8 +24,12 @@ module.exports = (hadOptions) ->
         if thing? and thing then true else false
 
     results: (options) ->
-      result = had.current
+      result = had.current ? {had:had.id}
       had.current = null
+
+      # treat options as overrides for current values
+      result[key] = value for own key,value of options
+
       return result
 
     success: (options={}, extra) ->
@@ -132,8 +136,3 @@ module.exports = (hadOptions) ->
     addError: (options) ->
       had.current = had.error options
       return true
-
-    results: () ->
-      result = had.current ? had:had.id
-      had.current = null
-      return result

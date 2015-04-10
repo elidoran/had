@@ -555,3 +555,37 @@ describe 'test had\'s functions', ->
         assert.equal result.type?, true, 'result.type should exist'
         assert.equal result.type, 'test',
         assert.deepEqual result, thisError
+
+  describe 'test results', ->
+
+    beforeEach 'create new had(\'results\')', ->
+      this.had = Had id:'results'
+
+    describe 'with no options', ->
+
+      it 'should return basic result with only had ID', ->
+
+        result = this.had.results()
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had, 'results', 'result.had should be \'results\''
+
+    describe 'with a single override value', ->
+
+      it 'should return result with had+override', ->
+
+        result = this.had.results some:'thing'
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had, 'results', 'result.had should be \'results\''
+        assert.equal result.some, 'thing', 'result.some should be \'thing\''
+
+    describe 'with error override values', ->
+
+      it 'should return result with overridden values', ->
+
+        result = this.had.results error:'new', type:'values'
+        assert.equal result?, true, 'result should exist'
+        assert.equal result.had, 'results', 'result.had should be \'results\''
+        assert.equal result?.error?, true, 'result.error should exist'
+        assert.equal result.error, 'new',
+        assert.equal result?.type?, true, 'result.type should exist'
+        assert.equal result.type, 'values'
