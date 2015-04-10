@@ -13,6 +13,17 @@ module.exports = (hadOptions) ->
 
       return false
 
+    nullProp: (propName, object) ->
+      unless object?
+        had.addError error:'null', type:'prop', name:propName, object:true
+        return true
+
+      unless object?[propName]?
+        had.addError error:'null', type:'prop', name:propName
+        return true
+
+      return false
+
     isSuccess: (thing) ->
       if thing?.had?
         if thing?.error? then return false

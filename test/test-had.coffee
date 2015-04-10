@@ -266,6 +266,81 @@ describe 'test had\'s functions', ->
         result = this.had.nullArg 'test', ->
         assert.equal result, false
 
+  describe 'test nullProp', ->
+
+    beforeEach 'create new had(\'nullProp\')', ->
+      this.had = Had id:'nullProp'
+
+    describe 'with null object', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.nullProp 'test', null
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'nullProp'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'prop'
+        assert.equal this.had.current.name,  'test'
+        assert.equal this.had.current.object,  true
+
+    describe 'with undefined object', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.nullProp 'test', undefined
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'nullProp'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'prop'
+        assert.equal this.had.current.name,  'test'
+        assert.equal this.had.current.object,  true
+
+    describe 'without prop', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.nullProp 'test', {}
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'nullProp'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'prop'
+        assert.equal this.had.current.name,  'test'
+
+    describe 'with null prop value', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.nullProp 'test', test:null
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'nullProp'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'prop'
+        assert.equal this.had.current.name,  'test'
+
+    describe 'with undefined prop value', ->
+
+      it 'should fill error content and return true', ->
+
+        result = this.had.nullProp 'test', test:undefined
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, true
+        assert.equal this.had.current.had, 'nullProp'
+        assert.equal this.had.current.error, 'null'
+        assert.equal this.had.current.type,  'prop'
+        assert.equal this.had.current.name,  'test'
+
+    describe 'with prop value', ->
+
+      it 'should return false', ->
+
+        result = this.had.nullProp 'test', test:'exists'
+        assert.equal result?, true, 'result should exist'
+        assert.equal result, false
+
   describe 'test success', ->
 
     beforeEach 'create new had(\'success\')', ->
