@@ -1,4 +1,6 @@
 
+# TODO: support array checks
+
 module.exports = (hadOptions) ->
 
   hadId = hadOptions?.id ? 'unknown had'
