@@ -1,5 +1,5 @@
 assert = require 'assert'
-Had = require '../index'
+Had = require '../lib'
 
 describe 'test had\'s functions', ->
 
