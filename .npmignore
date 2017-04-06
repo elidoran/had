@@ -1,6 +1,6 @@
 *.coffee
 test/
+coverage/
 .DS_Store
 .git
 .gitignore
-
