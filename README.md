@@ -16,33 +16,40 @@ For more explanation, read [Why had?](#why-had)
 
 ### Require + Create
 
-```coffeescript
-had = require('had') name:'name your had'
+```javascript
+var had = require('had')({ name:'name your had' })
+
+// OR:
+var buildHad = require('had')
+  , had = buildHad({ name: 'name your had' })
 ```
 
 ### Return success or error
 
-```coffeescript
-return had.error
-  error:'invalid user'  # if null, it'll be set to 'error'
-  type:'auth'           # if null, it'll be set to 'unknown'
-  username:'someone'    # optional value, you can specify as many as you want
+```javascript
+return had.error({
+  error:'invalid user',  // if null, it'll be set to 'error'
+  type:'auth',           // if null, it'll be set to 'unknown'
+  username:'someone',    // optional value, you can specify as many as you want
+})
 
-return had.success # success only sets value: success:true
-  username:'someone'               # optional value
-  token:'kJFO2fs8gvhhhg2o34uh9g7f' # optional value
+return had.success({
+  // success only sets value: success:true
+  username:'someone',               // optional value
+  token:'kJFO2fs8gvhhhg2o34uh9g7f', // optional value
+})
 ```
 
 ### Use success or error result
 
-```coffeescript
-result = someCall() # provides someValue
+```javascript
+var result = someCall() // provides someValue
 
-unless had.isSuccess result
-  return had.error result
+if ( ! had.isSuccess(result)) {
+  return had.error(result)
+}
 
-console.log 'I have: ', result.someValue
-
+console.log('I have: ', result.someValue)
 ```
 
 # Table of Contents
@@ -81,8 +88,12 @@ console.log 'I have: ', result.someValue
 
 Require `had` and call its function with options to create an instance.
 
-```coffeescript
-had = require('had') name:'my had'
+```javascript
+var had = require('had')({ name:'name your had' })
+
+// OR:
+var buildHad = require('had')
+  , had = buildHad({ name: 'name your had' })
 ```
 
 ### Success
@@ -91,12 +102,14 @@ had = require('had') name:'my had'
 
 See [had.success(options)](#hadsuccessoptions) for full example.
 
-```coffeescript
-add = (num1, num2) -> had.success sum: num1 + num2
+```javascript
+function add(num1, num2) {
+  had.success({ sum: num1 + num2 })
+}
 
-result = add 11, 22
+var result = add(11, 22)
 
-console.log 'sum = ', result.sum
+console.log('sum = ', result.sum)
 ```
 
 ### Error
@@ -105,13 +118,16 @@ console.log 'sum = ', result.sum
 
 See [had.error(options)](#haderroroptions) for full example.
 
-```coffeescript
-work = (info) ->
-  had.error error:'invalid value', type:'validation', value:'offending value'
+```javascript
+function work(info) {
+  return had.error({
+    error:'invalid value', type:'validation', value:'offending value'
+  })
+}
 
-result = work someInfo
+var result = work(someInfo)
 
-console.log 'bad value: ', result.value
+console.log('bad value: ', result.value)
 ```
 
 ### Null argument check
@@ -120,9 +136,9 @@ console.log 'bad value: ', result.value
 
 See [had.nullArg(options)](#hadnullargoptions) for full example.
 
-```coffeescript
-if had.nullParam 'info', info
-  return had.results() # already contains the error info
+```javascript
+if (had.nullParam('info', info))
+  return had.results() // already contains the error info
 ```
 
 ### Result check
@@ -131,13 +147,13 @@ if had.nullParam 'info', info
 
 See [had.isSuccess(result)](#hadissuccessresult) for full example.
 
-```coffeescript
-result = someCall()
+```javascript
+var result = someCall()
 
-unless had.isSuccess result
-  return had.error result
+if ( ! had.isSuccess(result))
+  return had.error(result)
 
-# else it has your success result, use them
+// else it has your success result, use them
 ```
 
 
@@ -155,11 +171,11 @@ I haven't implemented this specifically because I haven't seen a use for it yet.
 
 Instead, what I do is check for a falsey value, or `had` error, and return an error including the result.
 
-```coffeescript
-result = someCall()
+```javascript
+var result = someCall()
 
-unless had.isSuccess result
-  return had.error result
+if ( ! had.isSuccess(result))
+  return had.error(result)
 ```
 
 See [had.isSuccess(result)](#hadissuccessresult)
@@ -174,8 +190,9 @@ You may combine a `had` result you received from elsewhere into your own results
 See [Had Result ?](#had-result-) about testing if an object is a `had` result.
 (also shown directly above this section)
 
-```coffeescript
-return had.error result, error:'something failed', type:'fail' # bad examples
+```javascript
+return had.error(result, {error:'something failed', type:'fail'})
+// (bad examples)
 ```
 
 That's it. If it's a `had` result it will be included in your error result.
@@ -191,20 +208,24 @@ the error info you provide is used to create your error.
 
 [Back to: Table of Contents](#table-of-contents)
 
-```coffeescript
-successResult = had.success key1:value1, key2:value2, ...
-# same as this:
-successResult =
-  # know which 'had' made this
-  had: 'the had name you provided when building the had'
-  success: true
-  # for categorizing/handling
-  type : 'unknown type'
-  # all properties provided to had.error() would be here
-  key1: value1
-  key2: value2
-    ....
-  keyN: valueN
+```javascript
+var successResult = had.success({
+  key1:value1, key2:value2, /* ... */
+})
+
+// same as this:
+successResult = {
+  // know which 'had' made this
+  had: 'the had name you provided when building the had',
+  success: true,
+  // for categorizing/handling
+  type : 'unknown type',
+  // all properties provided to had.error() would be here
+  key1: value1,
+  key2: value2,
+  //  ....
+  keyN: valueN,
+}
 ```
 
 #### Multiple Success Results
@@ -215,16 +236,18 @@ When a second success result is added it combines them into an array.
 
 * When the second result is an error they are placed in separate arrays. See [Combined Results](#combined-results)
 
-```coffeescript
-had.addSuccess some:'thing'
-result = had.success something:'else'
-result = # contents of result
-  success: true
+```javascript
+had.addSuccess({ some:'thing', first:true })
+
+var result = had.success({ something:'else', second:true })
+result = { // contents of result
+  success: true,
   successes: [
-    { some:'thing'}
-    { something:'else'}
-  ]
-  had: 'the had name you gave it'
+    { some:'thing', first:true },
+    { something:'else', second:true },
+  ],
+  had: 'the had name you gave it',
+}
 ```
 
 
@@ -236,21 +259,24 @@ result = # contents of result
 
 [Back to: Table of Contents](#table-of-contents)
 
-```coffeescript
-errorResult = had.error key1:value1, key2:value2, ...
-# same as this:
-errorResult =
-  # know which 'had' made this
-  had: 'the had name you provided when building the had'
-  # default error message
-  error: 'error'
-  # for categorizing/handling
-  type : 'unknown type'
-  # all properties provided to had.error() would be here
-  key1: value1
-  key2: value2
-    ....
-  keyN: valueN
+```javascript
+var errorResult = had.error({
+  key1:value1, key2:value2, /* ... */
+})
+// same as this:
+errorResult = {
+  // know which 'had' made this
+  had: 'the had name you provided when building the had',
+  // default error message
+  error: 'error',
+  // for categorizing/handling
+  type : 'unknown type',
+  // all properties provided to had.error() would be here
+  key1: value1,
+  key2: value2,
+  //  ....
+  keyN: valueN,
+}
 ```
 
 #### Multiple Error Results
@@ -261,24 +287,30 @@ When a second error result is added it combines them into an array.
 
 * When the second result is a success they are placed in separate arrays. See [Combined Results](#combined-results)
 
-```coffeescript
-had.addError error:'unexpected disconnect', type:'network', id:737526355
-result = had.error error:'reconnect denied', type:'network', reason:'invalid token'
-result = # contents of result
-  error: true
+```javascript
+had.addError({
+  error:'unexpected disconnect', type:'network', id:737526355
+})
+
+result = had.error({
+  error:'reconnect denied', type:'network', reason:'invalid token'
+})
+result = { // contents of result
+  error: true,
   errors: [
     {
-      error:'unexpected disconnect'
-      type :'network'
-      id:737526355
-    }
+      error:'unexpected disconnect',
+      type :'network',
+      id:737526355,
+    },
     {
-      error:'reconnect denied'
-      type :'network'
-      reason:'invalid token'
-    }
-  ]
-  had: 'the had name you gave it'
+      error:'reconnect denied',
+      type :'network',
+      reason:'invalid token',
+    },
+  ],
+  had: 'the had name you gave it',
+}
 ```
 
 
@@ -288,23 +320,24 @@ result = # contents of result
 
 When a second result is added, either success or error, via any of the functions, the results are stored in arrays.
 
-```coffeescript
-had.addError error:'someError', type:'theType', input:123
-had.addError error:'someError', type:'theType', input:456
-had.addSuccess some:'thing'
-had.addSuccess something:'else'
-results = had.results() # or had.success/error to add another result
-results =
-  success: true
-  error  : true
+```javascript
+had.addError({ error:'someError', type:'theType', input:123 })
+had.addError({ error:'someError', type:'theType', input:456 })
+had.addSuccess({ some:'thing' })
+had.addSuccess({ something:'else' })
+var results = had.results() // or had.success/error to add another result
+results = {
+  success: true,
+  error  : true,
   successes: [
-    {success: true, something:'else'},
-    {success: true, some:'thing'},
-  ]
+    { success: true, something:'else' },
+    { success: true, some:'thing' },
+  ],
   errors: [
-    {error:'someError', type:'theType', input:123}
-    {error:'someError', type:'theType', input:456}
-  ]
+    { error:'someError', type:'theType', input:123 },
+    { error:'someError', type:'theType', input:456 },
+  ],
+}
 ```
 
 ## API
@@ -321,13 +354,14 @@ Does:
 3. clears the `had` so it's ready for new results
 4. returns the results
 
-```coffeescript
-result = had.success key1:value1, key2:value2
-result = # contents of result are:
-  success: true
-  key1: value1
-  key2: value2
-  had: name # name provided when creating the 'had'
+```javascript
+var result = had.success({ key1:value1, key2:value2 })
+result = { // contents of result are:
+  success: true,
+  key1: value1,
+  key2: value2,
+  had: name, // name provided when creating the 'had'
+}
 ```
 
 ### **had.error(options)**
@@ -335,18 +369,22 @@ result = # contents of result are:
 [Back to: Table of Contents](#table-of-contents)
 
 Does:
+
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 3. clears the `had` so it's ready for new results
 4. returns the results
 
-```coffeescript
-result = had.error error:'null', type:'param', name:'someParam'
-result = # contents of result are:
-  error: 'null'
-  type : 'param'
-  name : 'someParam'
-  had: name # name provided when creating the 'had'
+```javascript
+var result = had.error({
+  error:'null', type:'param', name:'someParam'
+})
+result = { // contents of result are:
+  error: 'null',
+  type : 'param',
+  name : 'someParam',
+  had: name, // name provided when creating the 'had'
+}
 ```
 
 **Note:** An optional second argument is used when including another result into
@@ -365,16 +403,20 @@ Does:
 1. clears the `had` so it's ready for new results
 2. returns the results
 
-```coffeescript
-result = had.addError error:'null', type:'param', name:'someParam'
-# result = true, it was added
-# now call results() to get that object
+```javascript
+var result = had.addError({
+  error:'null', type:'param', name:'someParam'
+})
+
+// result = true, it was added
+// now call results() to get that object
 result = had.results()
-result = # contents of result are:
-  error: 'null'
-  type : 'param'
-  name : 'someParam'
-  had: name # name provided when creating the 'had'
+result = { // contents of result are:
+  error: 'null',
+  type : 'param',
+  name : 'someParam',
+  had: name, name provided when creating the 'had'
+}
 ```
 
 **Note: *** No use for the options arg yet.
@@ -394,15 +436,16 @@ Does:
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 
-```coffeescript
-had.addSuccess file: 'someFile', note:'file already existed'
-result = had.success file:'anotherFile', note:'file created'
-result = # contents of results are:
-  success: true
+```javascript
+had.addSuccess({ file: 'someFile', note:'file already existed' })
+var result = had.success({ file:'anotherFile', note:'file created' })
+result = { // contents of results are:
+  success: true,
   successes: [
-    { file:'someFile', note:'file already existed' }
-    { file:'anotherFile', note:'file created'
-  ]
+    { file:'someFile', note:'file already existed' },
+    { file:'anotherFile', note:'file created' },
+  ],
+}
 ```
 
 ### **had.addError(options)**
@@ -420,15 +463,18 @@ Does:
 1. creates new Error result from options. See [Error Results](#error-results)
 2. if previous results exist, it combines them into arrays. See [Combined Results](#combined-results)
 
-```coffeescript
-had.addError error:'delete file failed', type:'fs', file:'fileName'
+```javascript
+had.addError({
+  error:'delete file failed', type:'fs', file:'fileName'
+})
 
-# had holds that error info until
-result = # contents of result are:
-  error: 'null'
-  type : 'param'
-  name : 'someParam'
-  had: name # name provided when creating the 'had'
+// had holds that error info until
+result = { // contents of result are:
+  error: 'null',
+  type : 'param',
+  name : 'someParam',
+  had: name, // name provided when creating the 'had'
+}
 ```
 
 ### **had.nullArg(argName, arg)**
@@ -437,19 +483,22 @@ result = # contents of result are:
 
 Returns true if `arg` is null or undefined; false otherwise.
 
-```coffeescript
-someParam = 1234
-if had.nullArg 'someArg', someArg
-  # result = false, so the if's then doesn't run
+```javascript
+var someParam = 1234
+if (had.nullArg('someArg', someArg))
+  // result = false, so the if won't run
 
 someArg = null
-if had.nullArg 'someArg', someArg
+if (had.nullArg('someArg', someArg)) {
+  // it is null so this if does run.
+  // what the results() look like right now:
   result = had.results()
-  result = # contents of results are:
-    error: 'null'
-    type : 'arg'
-    name : 'someArg'
-
+  result = { // contents of results are:
+    error: 'null',
+    type : 'arg',
+    name : 'someArg',
+  }
+}
 ```
 
 ### **had.isSuccess(result)**
@@ -458,11 +507,14 @@ if had.nullArg 'someArg', someArg
 
 Returns true when `result` is `true` or a `had` success result.
 
-```coffeescript
-result = someWork() # any value, might be a `had` result
+```javascript
+var result = someWork() // any value, might be a `had` result
 
-unless had.isSuccess result # unless falsey or a `had` error result
-  had.error result          # return an error containing other result  
+// if not a falsey or a `had` error result
+if ( ! had.isSuccess(result)) {
+  // return an error containing other result  
+  had.error(result)
+}
 ```
 
 
@@ -523,4 +575,6 @@ I see trying this out in version 0.5 or maybe 0.6.
 
 [Back to: Table of Contents](#table-of-contents)
 
-## MIT License
+## License
+
+[MIT](LICENSE)
