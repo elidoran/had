@@ -1,151 +1,109 @@
-
 # TODO: support array checks
+class Had
 
-module.exports = (hadOptions) ->
+  constructor: (options) ->
 
-  hadId = hadOptions?.id ? 'unknown had'
+    @id = options?.id ? 'unknown'
 
-  had =
-    id: hadId
 
-    nullArg: (argName, arg) ->
-      unless arg?
-        had.addError error:'null', type:'arg', name:argName
-        return true
+  nullArg: (argName, arg) ->
 
-      return false
-
-    nullProp: (propName, object) ->
-      unless object?
-        had.addError error:'null', type:'prop', name:propName, object:true
-        return true
-
-      unless object?[propName]?
-        had.addError error:'null', type:'prop', name:propName
-        return true
-
-      return false
-
-    isSuccess: (thing) ->
-      if thing?.had?
-        if thing?.error? then return false
-
-        if thing?.success? then return true
-
-        return true #? an empty result?
-      else
-        if thing? and thing then true else false
-
-    results: (options) ->
-      result = had.current ? {had:had.id}
-      had.current = null
-
-      # treat options as overrides for current values
-      result[key] = value for own key,value of options
-
-      return result
-
-    success: (options={}, extra) ->
-
-      if extra?
-        if options?.had
-          if options?.error then had.addError options
-          else if options?.success then had.addSuccess options
-        options = extra
-        extra = undefined
-
-      options?.success ?= true
-      options?.had     ?= hadId
-
-      if options?.error?
-        options._error_ = options.error
-        delete options.error
-
-      unless had?.current?
-        result = options
-
-      else
-
-        if had.current?.successes
-          result = had.current
-          result.successes.push options
-
-        else if had.current?.errors?
-          result = had.current
-          result.success = true
-          result.successes = [options]
-
-        else if had.current?.success
-          result =
-            had    : had.id
-            success: true
-            successes: [had.current, options]
-
-        else if had.current?.error?
-          result =
-            had    : had.id
-            success: true
-            error  : 'multiple'
-            successes: [options]
-            errors   : [had.current]
-
-        had.current = null
-
-      return result
-
-    error: (options={}, extra) ->
-
-      if extra?
-        if options?.had
-          if options?.error then had.addError options
-          else if options?.success then had.addSuccess options
-        options = extra
-        extra = undefined
-
-      options?.error ?= 'error'
-      options?.type  ?= 'unknown'
-      options?.had   ?= hadId
-
-      if options?.success?
-        options._success_ = options.success
-        delete options.success
-
-      unless had?.current?
-        result = options
-
-      else
-
-        if had.current?.errors?
-          result = had.current
-          result.errors.push options
-
-        else if had.current?.successes
-          result = had.current
-          result.error = 'multiple'
-          result.errors = [options]
-
-        else if had.current?.error?
-          result =
-            had    : had.id
-            error  : 'multiple'
-            errors   : [had.current, options]
-
-        else if had.current?.success
-          result =
-            had    : had.id
-            success: true
-            error  : 'multiple'
-            successes: [had.current]
-            errors   : [options]
-
-        had.current = null
-
-      return result
-
-    addSuccess: (options) ->
-      had.current = had.success options
+    unless arg?
+      @addError message:'null', type:'arg', name:argName
       return true
 
-    addError: (options) ->
-      had.current = had.error options
+    return false
+
+
+  nullProp: (propName, object) ->
+
+    unless object?
+      @addError message:'null', type:'prop', name:propName, object:true
       return true
+
+    unless object?[propName]?
+      @addError message:'null', type:'prop', name:propName
+      return true
+
+    return false
+
+
+  isSuccess: (thing) ->
+
+    # if it's a had object, check for `error`
+    if thing?.had? then not thing.error?
+
+    # if it exists and is truthy then return true
+    else if thing? and thing then true else false
+
+
+  results: (options) -> # no use for `options` yet
+
+    # if there's some results in there to use
+    if @array?.length > 0
+
+      # get the most recent one
+      result = @array.pop()
+
+      # set previous to the array (if it has more)
+      # NOTE: adding a property to the object causes slo-mo mode.
+      result.previous = if @array.length > 0 then @array else null
+
+    # default empty result
+    else result = had:@id
+
+    @array = null
+
+    # use options as an override
+    result[key] = value for own key, value of options
+
+    return result
+
+
+  _store: (object) ->
+    # NOTE: pushing newer results on the end of the array
+    if @array? then @array.push object
+    else @array = [ object ]
+    return
+
+
+  addSuccess: (value) ->
+    # conditionally set a `value` property when there's a value.
+    @_store if value? then had:@id, value:value else had:@id
+
+  # always set an `error` property cuz it marks it as an error
+  addError: (value) -> @_store had: @id, error: value ? 'unknown'
+
+
+  success: (first, second) ->
+
+    if second? and first?.had? then @_store first
+
+    value = second ? first
+
+    # conditionally set a `success` property when there's a value.
+    success =
+      if value? then had:@id, value:value, previous: @array
+      else had:@id, previous: @array
+
+    @array = null
+
+    return success
+
+
+  error: (first, second) ->
+
+    if second? and first?.had? then @_store first
+
+    error =
+      had: @id
+      error: second ? first ? 'unknown'
+      previous: @array
+
+    @array = null
+
+    return error
+
+
+module.exports = (options) -> new Had options
+module.exports.Had = Had
