@@ -1,3 +1,8 @@
+### 0.7.1 - 2017/04/08
+
+1. add `build/` to `.npmignore`
+2. specify `files` in `package.json`
+
 ### 0.7.0 - 2017/04/08
 
 1. rewrite implementation for simplified result objects
