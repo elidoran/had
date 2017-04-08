@@ -1,6 +1,6 @@
 {
   "name": "had",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Result/Error holder and helper",
   "main": "lib/index.js",
   "author": "Eli Doran <eli+npm@elidoran.com>",
