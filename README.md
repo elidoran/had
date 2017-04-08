@@ -126,7 +126,7 @@ console.log('I have: ', result.value.something)
     2. [had.error(value)](#haderrorvalue)
     3. [had.results(options)](#hadresultsoptions)
     4. [had.addSuccess(value)](#hadaddsuccessvalue)
-    5. [had.addError(value)](#hadadderrvalue)
+    5. [had.addError(value)](#hadadderrorvalue)
     6. [had.nullArg(argName, arg)](#hadnullargargname-arg)
     7. [had.nullProp(key, object)](#hadnullpropskey-object)
     8. [had.isSuccess(result)](#hadissuccessresult)
@@ -837,7 +837,7 @@ if (had.nullArg('someArg', someArg)) {
 
 [Back to: Table of Contents](#table-of-contents)
 
-Returns true if the `key` in `object` is null or undefined; false otherwise.
+Returns true if the `object` is null or undefined, or, if the `key` in `object` is null or undefined; false otherwise.
 
 ```javascript
 var had = require('had')({ id:'prop' })
