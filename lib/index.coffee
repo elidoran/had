@@ -4,6 +4,7 @@ class Had
   constructor: (options) ->
 
     @id = options?.id ? 'unknown'
+    @array = null
 
 
   nullArg: (argName, arg) ->
@@ -34,7 +35,9 @@ class Had
     if thing?.had? then not thing.error?
 
     # if it exists and is truthy then return true
-    else if thing? and thing then true else false
+    else if thing? and thing then true
+
+    else false
 
 
   results: (options) -> # no use for `options` yet
