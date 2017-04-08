@@ -1,6 +1,6 @@
 {
   "name": "had",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Result/Error holder and helper",
   "main": "lib/index.js",
   "files": [
