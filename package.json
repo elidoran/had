@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "coffeelint -f build/coffeelint.json lib",
+    "prebuild": "npm run lint",
     "build": "coffee --compile --bare --no-header lib",
     "clean": "rm -rf ./lib/*.js",
     "prepublish": "npm run build",
