@@ -2,8 +2,8 @@
   "name": "had",
   "version": "0.6.1",
   "description": "Result/Error holder and helper",
-  "main": "index.js",
-  "author": "Eli Doran <eli@elidoran.com>",
+  "main": "lib/index.js",
+  "author": "Eli Doran <eli+npm@elidoran.com>",
   "license": "MIT",
   "scripts": {
     "lint": "coffeelint -f build/coffeelint.json lib",
