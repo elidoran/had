@@ -10,15 +10,15 @@ It's possible to use this for every function return result. However, I think it'
 
 For example, when returning a result from a library's public API. The boundary is where values leave a library's control. It may also be helpful in important or significant functions. There are plenty of "little functions" to simply return the straight value.
 
-However, if this was used everywhere, the insight and control of return results would be considerable. It can build up a history of return results which allows an insight into how an error was reached.
+However, if this was used everywhere, the insight and control of return results would be considerable. It can build up a history of return results which allows an insight into an error which was passed up multiple times.
 
-Also, the information about an error is much more specific when it's used to specify exactly what's going on in the code at the place the error result is generated. It can say which array variable, which index, what it as trying to do with it, and more.
+Also, the information about an error is much more specific when it's used to specify exactly what's going on in the code at the place the error result is generated. It can say which array variable, which index, what it is trying to do with it, and more.
 
 The main thing to keep in mind is this means a function will always return an object. That object is an error if it has an `error` property. Otherwise, it's a success result, and may have a `value` property containing the success result value.
 
 For more explanation, read [Why had?](#why-had)
 
-Note, v0.7.0 includes a significant changes due to (simplifying) rewrite.
+Note, v0.7.0 includes significant changes due to a rewrite.
 
 
 ## Quick Start
@@ -123,16 +123,17 @@ console.log('I have: ', result.value.something)
     5. [Some Mixed Results](#some-mixed-results)
 4. [API](#api)
     1. [had.success(value)](#hadsuccessvalue)
-    2. [had.error(error)](#haderrorvalue)
+    2. [had.error(value)](#haderrorvalue)
     3. [had.results(options)](#hadresultsoptions)
-    4. [had.addSuccess(value)](#hadaddsuccessoptions)
-    5. [had.addError(value)](#hadadderrorptions)
+    4. [had.addSuccess(value)](#hadaddsuccessvalue)
+    5. [had.addError(value)](#hadadderrvalue)
     6. [had.nullArg(argName, arg)](#hadnullargargname-arg)
     7. [had.nullProp(key, object)](#hadnullpropskey-object)
     8. [had.isSuccess(result)](#hadissuccessresult)
 5. [Why had?](#why-had)
 6. [Future Plans](#future-plans)
     1. [Register Handlers](#register-handlers)
+7. [MIT License](LICENSE)
 
 
 ## Basic Use
@@ -631,7 +632,7 @@ had.success(result, { some:'thing' })
 ```
 
 
-### **had.error(error)**
+### **had.error(value)**
 
 [Back to: Table of Contents](#table-of-contents)
 
@@ -749,7 +750,7 @@ result = { // contents of results are:
 }
 ```
 
-### **had.addError(options)**
+### **had.addError(value)**
 
 [Back to: Table of Contents](#table-of-contents)
 
@@ -823,13 +824,69 @@ if (had.nullArg('someArg', someArg)) {
     had: 'arg',
     error: {
       message: 'null',
-      type : 'arg',
-      name : 'someArg',
+      type: 'arg',
+      name: 'someArg',
     },
     previous: null,
   }
 }
 ```
+
+
+### **had.nullProps(key, object)**
+
+[Back to: Table of Contents](#table-of-contents)
+
+Returns true if the `key` in `object` is null or undefined; false otherwise.
+
+```javascript
+var had = require('had')({ id:'prop' })
+  , object1 = { some: 'thing' }
+  , object2 = { some: null }
+  , object3 = null
+
+if (had.nullProp('some', object1)) {
+  // result = false, so the if won't run
+}
+
+if (had.nullProp('some', object2)) {
+  // it is null so this if does run.
+  // what the results() looks like right now:
+  result = had.results()
+  result = { // contents of results are:
+    had: 'prop',
+    error: {
+      message: 'null',
+      type: 'prop',
+      name: 'some',
+      // NOTE:
+      // no `object` property cuz
+      // the object wasn't null, the prop was.
+    },
+    previous: null,
+  }
+}
+
+if (had.nullProp('some', object3)) {
+  // the object itself is null
+  // so, this if will run.
+  // what the results() looks like right now:
+  result = had.results()
+  result = { // contents of results are:
+    had: 'prop',
+    error: {
+      message: 'null',
+      type: 'prop',
+      name: 'some',
+      // NOTE:
+      //   this means the object itself was null.
+      object: true,
+    },
+    previous: null,
+  }
+}
+```
+
 
 ### **had.isSuccess(result)**
 
